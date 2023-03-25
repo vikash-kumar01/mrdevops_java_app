@@ -37,7 +37,7 @@ resource "aws_eks_cluster" "eks" {
 
 resource "aws_iam_role" "eks_cluster" {
   # The name of the role
-  name = "eks-cluster"
+  name = "eks-cluster1"
 
   # The policy that grants an entity permission to assume the role.
   # Used to access AWS resources that you might not normally have access to.
