@@ -130,17 +130,18 @@ pipeline{
             }
         }
         stage('Connect to EKS '){
-            steps{
-                script{
+        steps{
 
-                    sh """
-                    aws configure set aws_access_key_id $ACCESS_KEY
-                    aws configure set aws_secret_access_key $ACCESS_KEY
-                    aws configure set region ${params.Region}
-                    aws eks update-kubeconfig --name ${params.cluster} --region ${params.Region}
-                    """
-                }
+            script{
+
+                sh """
+                aws configure set aws_access_key_id "$ACCESS_KEY"
+                aws configure set aws_secret_access_key "$SECRET_KEY"
+                aws configure set region "${params.Region}"
+                aws eks --region ${params.Region} update-kubeconfig --name ${params.cluster}
+                """
             }
+        }
         }     
     }
 }
