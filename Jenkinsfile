@@ -21,10 +21,17 @@ pipeline{
 
             steps{
                 script{
-
                     mvnTest()
                 }
             }
-        }        
+        }    
+
+        stage("Integration Test Maven"){
+
+            steps{
+                script{
+                    mvnIntegrationTest()
+                }
+            }
+        }            
     }
-}
