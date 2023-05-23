@@ -1,7 +1,7 @@
 @Library('my-shared-library') _
 
 pipeline{
-    
+
     agent any
 
     stages{
@@ -10,7 +10,7 @@ pipeline{
 
             steps{
             gitCheckout(
-                        branch: "main",
+                        branch: "devops",
                         url: "https://github.com/EmmanuelAudu/java_ap.git"
                     )
                 
