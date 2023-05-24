@@ -43,7 +43,7 @@ pipeline{
         when { expression { params.action == 'create' } }
             steps{
                 script{
-                   statiCodeAnalysis()
+                   statiCodeAnalysis(credentialsId)
                 }
             }
         }          
