@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.minikube.sample.MinikubeSampleApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 24.78 s - in com.minikube.sample.MinikubeSampleApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 24.911 s - in com.minikube.sample.MinikubeSampleApplicationTests
