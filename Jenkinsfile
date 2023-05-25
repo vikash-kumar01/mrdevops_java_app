@@ -52,25 +52,25 @@ pipeline{
                 }
             }
         }          
-        stage("Quality Gate Status Check: Sonarqube"){
-        when { expression { params.action == 'create' } }
-            steps{
-                script{
-
-                def SonarQubecredentialsId = 'sonar-api'
-                   QualityGateStatus(SonarQubecredentialsId)
-                }
-            }
-        }    
-        // stage("Maven Build: maven"){
+        // stage("Quality Gate Status Check: Sonarqube"){
         // when { expression { params.action == 'create' } }
         //     steps{
         //         script{
-                    
-        //             mvnBuild()
+
+        //         def SonarQubecredentialsId = 'sonar-api'
+        //            QualityGateStatus(SonarQubecredentialsId)
         //         }
         //     }
         // }    
+        stage("Maven Build: maven"){
+        when { expression { params.action == 'create' } }
+            steps{
+                script{
+                    
+                    mvnBuild()
+                }
+            }
+        }    
         // stage("Docker Image Build"){
         // when { expression { params.action == 'create' } }
         //     steps{
