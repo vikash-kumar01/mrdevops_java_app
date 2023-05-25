@@ -52,16 +52,16 @@ pipeline{
                 }
             }
         }          
-        // stage("Quality Gate Status Check: Sonarqube"){
-        // when { expression { params.action == 'create' } }
-        //     steps{
-        //         script{
+        stage("Quality Gate Status Check: Sonarqube"){
+        when { expression { params.action == 'create' } }
+            steps{
+                script{
 
-        //         def SonarQubecredentialsId = 'sonar-api'
-        //            QualityGateStatus(SonarQubecredentialsId)
-        //         }
-        //     }
-        // }    
+                def SonarQubecredentialsId = 'sonar-api'
+                   QualityGateStatus(SonarQubecredentialsId)
+                }
+            }
+        }    
         // stage("Maven Build: maven"){
         // when { expression { params.action == 'create' } }
         //     steps{
