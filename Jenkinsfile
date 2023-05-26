@@ -26,32 +26,43 @@ pipeline{
             }
         }
 
-        //  stage("Unit Test Maven"){
-        //  when { expression { params.action == 'create' } }
-        //      steps{
-        //          script{
-        //              mvnTest()
-        //          }
-        //      }
-        //  }    
-        // stage("Integration Test Maven"){
-        // when { expression { params.action == 'create' } }
-        //     steps{
-        //         script{
-        //             mvnIntegrationTest()
-        //         }
-        //     }
-        // }  
-        stage("Static code analysis: Sonarqube"){
+         stage("Unit Test Maven"){
+         when { expression { params.action == 'create' } }
+             steps{
+                 script{
+                     mvnTest()
+                 }
+             }
+         }    
+        stage("Integration Test Maven"){
         when { expression { params.action == 'create' } }
             steps{
                 script{
-
-                def SonarQubecredentialsId = 'sonar-api'
-                   statiCodeAnalysis(SonarQubecredentialsId)
+                    mvnIntegrationTest()
                 }
             }
-        }          
+        }  
+        stage("Static code analysis: SonarQube"){
+            when { expression { params.action == 'create' } }
+            steps{
+                script{
+                    withSonarQubeEnv('SonarQubeServer') {
+                        // Set SonarQube server configuration
+                        def sonarScannerHome = tool 'sonar-api'
+                        def sonarQubeURL = 'http://sonarqube-server:9000'
+                        def sonarQubeAuthToken = 'sonarqube-auth-token'
+                        def sonarQubeProjectKey = 'my-project-key'
+
+                        // Run SonarQube analysis
+                        sh "${sonarScannerHome}/bin/sonar-scanner \
+                            -Dsonar.host.url=${sonarQubeURL} \
+                            -Dsonar.login=${sonarQubeAuthToken} \
+                            -Dsonar.projectKey=${sonarQubeProjectKey}"
+                    }
+                }
+            }
+        }
+         
         stage("Quality Gate Status Check: Sonarqube"){
         when { expression { params.action == 'create' } }
             steps{
@@ -62,23 +73,23 @@ pipeline{
                 }
             }
         }    
-        // stage("Maven Build: maven"){
-        // when { expression { params.action == 'create' } }
-        //     steps{
-        //         script{
+        stage("Maven Build: maven"){
+        when { expression { params.action == 'create' } }
+            steps{
+                script{
                     
-        //             mvnBuild()
-        //         }
-        //     }
-        // }    
-        // stage("Docker Image Build"){
-        // when { expression { params.action == 'create' } }
-        //     steps{
-        //         script{
+                    mvnBuild()
+                }
+            }
+        }    
+        stage("Docker Image Build"){
+        when { expression { params.action == 'create' } }
+            steps{
+                script{
                     
-        //             dockerBuild("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
-        //         }
-        //     }
-        // }    
+                    dockerBuild("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
+                }
+            }
+        }    
     }
 }
