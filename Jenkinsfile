@@ -42,27 +42,16 @@ pipeline{
                 }
             }
         }  
-        stage("Static code analysis: SonarQube"){
-            when { expression { params.action == 'create' } }
+        stage("Static code analysis: Sonarqube"){
+        when { expression { params.action == 'create' } }
             steps{
                 script{
-                    withSonarQubeEnv('SonarQubeServer') {
-                        // Set SonarQube server configuration
-                        def sonarScannerHome = tool 'sonar-api'
-                        def sonarQubeURL = 'http://sonarqube-server:9000'
-                        def sonarQubeAuthToken = 'sonarqube-auth-token'
-                        def sonarQubeProjectKey = 'my-project-key'
 
-                        // Run SonarQube analysis
-                        sh "${sonarScannerHome}/bin/sonar-scanner \
-                            -Dsonar.host.url=${sonarQubeURL} \
-                            -Dsonar.login=${sonarQubeAuthToken} \
-                            -Dsonar.projectKey=${sonarQubeProjectKey}"
-                    }
+                def SonarQubecredentialsId = 'sonar-api'
+                   statiCodeAnalysis(SonarQubecredentialsId)
                 }
             }
-        }
-         
+        }          
         stage("Quality Gate Status Check: Sonarqube"){
         when { expression { params.action == 'create' } }
             steps{
