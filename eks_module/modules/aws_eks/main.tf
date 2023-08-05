@@ -18,7 +18,13 @@ resource "aws_eks_cluster" "eks" {
     endpoint_public_access = true
 
     # Must be in at least two different availability zones
-       subnet_ids = ["subnet-0c6265a3df91b7b61","subnet-0f9c4ff10c3526a4d","subnet-04919de8d00a175f3","subnet-080af72a4f9415d55"]
+    subnet_ids = var.subnet_ids
+    #   subnet_ids = [
+    #   aws_subnet.public_1.id,
+    #   aws_subnet.public_2.id,
+    #   aws_subnet.private_1.id,
+    #   aws_subnet.private_2.id
+    # ]
   }
 
   # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.
@@ -26,9 +32,7 @@ resource "aws_eks_cluster" "eks" {
   depends_on = [
     aws_iam_role_policy_attachment.amazon_eks_cluster_policy
   ]
-    tags = {
-        "Name" =  "demo-cluster"
-    }
+  tags = var.tags
 }
 
 resource "aws_iam_role" "eks_cluster" {
@@ -65,13 +69,4 @@ resource "aws_iam_role_policy_attachment" "amazon_eks_cluster_policy" {
 resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly-EKS" {
  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
  role    = aws_iam_role.eks_cluster.name
-}
-
-
-output "eks_cluster_name" {
-    value = aws_eks_cluster.eks.name
-}
-
-variable "eks_cluster_name" {
-     default  =  "demo-cluster1"
 }

@@ -1,20 +1,8 @@
 
-variable "eks_cluster_name" {
-  
-}
-variable "node_group_name" {
-  default = ""mynode""
-}
-
-variable "nodes_iam_role" {
-  default = "eks-node-group-general1"
-}
-
-
 
 resource "aws_eks_node_group" "nodes_general" {
   # Name of the EKS Cluster.
-  cluster_name = aws_eks_cluster.eks.name
+  cluster_name = var.eks_cluster_name
 
   # Name of the EKS Node Group.
   node_group_name = var.node_group_name
@@ -25,7 +13,7 @@ resource "aws_eks_node_group" "nodes_general" {
   # Identifiers of EC2 Subnets to associate with the EKS Node Group. 
   # These subnets must have the following resource tag: kubernetes.io/cluster/CLUSTER_NAME 
   # (where CLUSTER_NAME is replaced with the name of the EKS Cluster).
-  subnet_ids = [subnet-0c6265a3df91b7b61","subnet-0f9c4ff10c3526a4d","subnet-04919de8d00a175f3","subnet-080af72a4f9415d55"]
+  subnet_ids = var.subnet_ids
 
   # Configuration block with scaling settings
   scaling_config {
@@ -66,9 +54,7 @@ resource "aws_eks_node_group" "nodes_general" {
     aws_iam_role_policy_attachment.amazon_eks_cni_policy_general,
     aws_iam_role_policy_attachment.amazon_ec2_container_registry_read_only,
   ]
-  tags = {
-             "Name" =  "node1"
-         } 
+  tags =  var.tags
 }
 
 # Create IAM role for EKS Node Group
